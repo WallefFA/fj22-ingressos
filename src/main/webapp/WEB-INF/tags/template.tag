@@ -11,6 +11,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
 <jsp:invoke fragment="compra_css"/>
+<style type="text/css">
+body {
+	background-color:maroon;
+	color:white;
+}
+</style>
 </head>
 <body>
 	<nav class="navbar navbar-default">
