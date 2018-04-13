@@ -14,6 +14,7 @@ public class Sessao {
 	@GeneratedValue
 	private Integer id;
 	private LocalTime horario;
+	
 	@ManyToOne
 	private Filme filme;
 	

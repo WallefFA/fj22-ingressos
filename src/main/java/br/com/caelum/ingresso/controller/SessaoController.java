@@ -4,8 +4,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,7 +32,9 @@ public class SessaoController {
 	@GetMapping("/admin/sessao")
 	public ModelAndView form(@RequestParam("salaId") Integer salaId, SessaoForm form) {
 		
-		ModelAndView modelAndView = new ModelAndView();
+		form.setSalaId(salaId);
+		
+		ModelAndView modelAndView = new ModelAndView("sessao/sessao");
 		
 		modelAndView.addObject("sala", salaDao.findOne(salaId));
 		modelAndView.addObject("filmes",  filmeDao.findAll());
@@ -39,12 +43,18 @@ public class SessaoController {
 		return modelAndView;
 	}
 	
+	@PostMapping(value = "/admin/sessao")
+	@Transactional
 	public ModelAndView salva(@Valid SessaoForm form, BindingResult result) {
 		if (result.hasErrors()) return form(form.getSalaId(), form);
 		
+		ModelAndView modelAndView = new ModelAndView("redirect:/admin/sala/" + form.getSalaId() + "/sessoes");
+		
 		Sessao sessao = form.toSessao(salaDao, filmeDao);
 		
-		return new ModelAndView("redirect:/admin/sala" + form.getSalaId() + "/sessoes");		
+		sessaoDao.save(sessao);
+		
+		return modelAndView;	
 	}
 	
 	
